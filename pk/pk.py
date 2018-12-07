@@ -16,12 +16,12 @@ class Drug:
         tmax (float): The drug's time to maximum concentration.
     """
 
-    def __init__(self, tmax, hl2):
+    def __init__(self, hl2, tmax):
         """Initializes a Drug.
 
         Args:
-            tmax (float): The drug's time to maximum concentration.
             hl2 (float): The drug's terminal half-life.
+            tmax (float): The drug's time to maximum concentration.
         """
         self.tmax = float(tmax)
         self.hl2 = float(hl2)
