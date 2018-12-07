@@ -3,7 +3,8 @@
 from functools import partial
 
 import numpy as np
-from scipy import linalg, optimize
+from scipy.linalg import expm
+from scipy.optimize import brent
 
 
 class Drug:
@@ -25,7 +26,7 @@ class Drug:
         """
         self.tmax = float(tmax)
         self.hl2 = float(hl2)
-        self.hl1 = optimize.brent(lambda hl1: (self._tmax_given_hls(hl1, self.hl2) - self.tmax)**2)
+        self.hl1 = brent(lambda hl1: (self._tmax_given_hls(hl1, self.hl2) - self.tmax)**2)
         self.n_0 = 1 / self._concentration_at_time(self.tmax, self.hl1, self.hl2)
 
     def __repr__(self):
@@ -48,8 +49,8 @@ class Drug:
         rate_1 = np.log(2) / hl1
         rate_2 = np.log(2) / hl2
         mat = np.float64([[rate_1, -rate_1, 0], [0, rate_2, -rate_2], [0, 0, 0]])
-        mat_offset = linalg.expm(mat * offset)
-        mat_step = linalg.expm(-mat * step)
+        mat_offset = expm(mat * offset)
+        mat_step = expm(-mat * step)
         solution = np.zeros((num, 3))
         solution[0] = [1, 0, 0] @ mat_offset
         for i in range(1, num):
@@ -85,7 +86,7 @@ class Drug:
             return 0
         if hl1 < 0:
             return np.inf
-        return optimize.brent(lambda t: -cls._concentration_at_time(t, hl1, hl2))
+        return brent(lambda t: -cls._concentration_at_time(t, hl1, hl2))
 
     def concentration(self, num, step, dose=1, offset=0):
         """Calculates drug concentrations at the given times.
