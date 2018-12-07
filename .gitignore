@@ -4,4 +4,3 @@ dist
 *.egg-info
 venv
 *.ipynb
-*.png
