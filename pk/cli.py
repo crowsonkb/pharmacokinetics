@@ -31,7 +31,7 @@ def main():
     drug = pk.Drug(args.hl, args.tmax)
     num = round(args.duration / step + 1)
     x = np.arange(num) * step
-    y = drug.concentration_sum_of_doses(num, step, args.doses, args.offsets)
+    y = drug.concentration(num, step, dict(zip(args.offsets, args.doses)))
 
     plt.rcParams['font.size'] = 12
 
