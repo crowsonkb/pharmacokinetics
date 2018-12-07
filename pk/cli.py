@@ -10,7 +10,8 @@ import pk
 
 def main():
     """The main function."""
-    ap = argparse.ArgumentParser(description=__doc__)
+    ap = argparse.ArgumentParser(description=__doc__,
+                                 formatter_class=argparse.ArgumentDefaultsHelpFormatter)
     ap.add_argument('--hl', type=float, required=True, metavar='HOURS',
                     help='the drug\'s terminal half-life, in hours')
     ap.add_argument('--tmax', type=float, required=True, metavar='HOURS',
