@@ -13,22 +13,23 @@ def main():
     ap = argparse.ArgumentParser(description=__doc__,
                                  formatter_class=argparse.ArgumentDefaultsHelpFormatter)
     ap.add_argument('--hl', type=float, required=True, metavar='HOURS',
-                    help='the drug\'s terminal half-life, in hours')
+                    help='the drug\'s elimination half-life, in hours')
     ap.add_argument('--tmax', type=float, required=True, metavar='HOURS',
                     help='the drug\'s time to maximum concentration, in hours')
-    ap.add_argument('--time', type=float, default=24, metavar='HOURS',
-                    help='the number of hours to simulate concentrations for')
+    ap.add_argument('--duration', type=float, default=24, metavar='HOURS',
+                    help='the duration, in hours, to simulate concentrations for')
     ap.add_argument('--doses', type=float, nargs='+', default=[1], metavar='DOSE',
-                    help='the magnitudes of each dose')
+                    help='the magnitudes of each dose (units are arbitrary)')
     ap.add_argument('--offsets', type=float, nargs='+', default=[0], metavar='OFFSET',
-                    help='the time, in hours, each dose is given at')
-    ap.add_argument('--output', default='output.png', help='the output image file')
+                    help='the time, in hours, that each dose is given at')
+    ap.add_argument('--output', default='output.png', metavar='FILE',
+                    help='the output image file')
     args = ap.parse_args()
 
     step = 1/60
 
     drug = pk.Drug(args.hl, args.tmax)
-    num = round(args.time / step + 1)
+    num = round(args.duration / step + 1)
     x = np.arange(num) * step
     y = drug.concentration_sum_of_doses(num, step, args.doses, args.offsets)
 

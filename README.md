@@ -25,24 +25,25 @@ Usage
 -----
 
 ```
-usage: pk [-h] --hl HOURS --tmax HOURS [--time HOURS]
+usage: pk [-h] --hl HOURS --tmax HOURS [--duration HOURS]
           [--doses DOSE [DOSE ...]] [--offsets OFFSET [OFFSET ...]]
-          [--output OUTPUT]
+          [--output FILE]
 
 Calculates and plots drug concentration over time.
 
 optional arguments:
   -h, --help            show this help message and exit
-  --hl HOURS            the drug's terminal half-life, in hours (default:
+  --hl HOURS            the drug's elimination half-life, in hours (default:
                         None)
   --tmax HOURS          the drug's time to maximum concentration, in hours
                         (default: None)
-  --time HOURS          the number of hours to simulate concentrations for
+  --duration HOURS      the duration, in hours, to simulate concentrations for
                         (default: 24)
   --doses DOSE [DOSE ...]
-                        the magnitudes of each dose (default: [1])
+                        the magnitudes of each dose (units are arbitrary)
+                        (default: [1])
   --offsets OFFSET [OFFSET ...]
-                        the time, in hours, each dose is given at (default:
-                        [0])
-  --output OUTPUT       the output image file (default: output.png)
+                        the time, in hours, that each dose is given at
+                        (default: [0])
+  --output FILE         the output image file (default: output.png)
 ```
