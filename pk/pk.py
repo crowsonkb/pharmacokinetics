@@ -1,4 +1,4 @@
-"""Calculates drug concentrations over time."""
+"""Calculates drug concentration over time."""
 
 from functools import partial
 

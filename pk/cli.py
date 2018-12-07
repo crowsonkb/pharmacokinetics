@@ -1,4 +1,4 @@
-"""Calculates and plots drug concentrations over time."""
+"""Calculates and plots drug concentration over time."""
 
 import argparse
 
