@@ -12,7 +12,7 @@ Here, `pk` computes the concentration of a drug with a terminal half-life (t<sub
 pk --hl 6 --tmax 2 --doses 1 1 1 --offsets 0 4 8 --output demo.png
 ```
 
-<img src="demo.png" width="900" height="600">
+<img src="demo.png" width="960" height="640">
 
 Installation
 ------------

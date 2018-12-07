@@ -41,10 +41,14 @@ def main():
     fig_width = args.output_size[0] / args.dpi
     fig_height = args.output_size[1] / args.dpi
     fig, ax = plt.subplots(figsize=(fig_width, fig_height), tight_layout=True)
+    ax.plot(x, y)
     ax.set_xlabel('Hours', fontsize=18)
     ax.set_ylabel('Concentration', fontsize=18)
     ax.grid(linestyle='--')
-    ax.plot(x, y)
+    hour_tick_steps = [1, 1.2, 1.6, 1.68, 2, 2.4, 3, 4, 4.8, 6, 8, 9.6, 10]
+    ax.xaxis.set_major_locator(plt.MaxNLocator(nbins='auto', integer=True, steps=hour_tick_steps))
+    ax.margins(0.025, 0.05)
+    ax.autoscale()
     fig.savefig(args.output, dpi=args.dpi)
 
 if __name__ == '__main__':
