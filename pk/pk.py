@@ -8,14 +8,14 @@ from scipy.optimize import brent
 class Drug:
     """A drug's pharmacokinetic parameters.
 
-    :param c_0: The initial concentration normalization factor.
-    :type c_0: float
-    :param hl_a: The drug's absorption half-life.
-    :type hl_a: float
-    :param hl_e: The drug's elimination half-life.
-    :type hl_e: float
-    :param t_max: The drug's time to maximum concentration.
-    :type t_max: float
+    :ivar c_0: The initial concentration normalization factor.
+    :vartype c_0: float
+    :ivar hl_a: The drug's absorption half-life.
+    :vartype hl_a: float
+    :ivar hl_e: The drug's elimination half-life.
+    :vartype hl_e: float
+    :ivar t_max: The drug's time to maximum concentration.
+    :vartype t_max: float
     """
 
     def __init__(self, hl, t_max):
