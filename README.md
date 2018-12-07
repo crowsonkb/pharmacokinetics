@@ -27,7 +27,7 @@ Usage
 ```
 usage: pk [-h] --hl HOURS --tmax HOURS [--duration HOURS]
           [--doses DOSE [DOSE ...]] [--offsets OFFSET [OFFSET ...]]
-          [--output FILE]
+          [--output FILE] [--output-size W H] [--dpi DPI]
 
 Calculates and plots drug concentration over time.
 
@@ -45,5 +45,8 @@ optional arguments:
   --offsets OFFSET [OFFSET ...]
                         the time, in hours, that each dose is given at
                         (default: [0])
-  --output FILE         the output image file (default: output.png)
+  --output FILE         the output image filename (default: output.png)
+  --output-size W H     the output width and height in pixels (default: [1920,
+                        1280])
+  --dpi DPI             the output dots per inch (dpi) (default: 160)
 ```

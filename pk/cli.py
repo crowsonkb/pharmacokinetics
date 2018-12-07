@@ -23,7 +23,10 @@ def main():
     ap.add_argument('--offsets', type=float, nargs='+', default=[0], metavar='OFFSET',
                     help='the time, in hours, that each dose is given at')
     ap.add_argument('--output', default='output.png', metavar='FILE',
-                    help='the output image file')
+                    help='the output image filename')
+    ap.add_argument('--output-size', type=int, nargs=2, default=[1920, 1280], metavar=('W', 'H'),
+                    help='the output width and height in pixels')
+    ap.add_argument('--dpi', type=float, default=160, help='the output dots per inch (dpi)')
     args = ap.parse_args()
 
     step = 1/60
@@ -35,13 +38,14 @@ def main():
 
     plt.rcParams['font.size'] = 12
 
-    fig, ax = plt.subplots(figsize=(12, 8), tight_layout=True)
+    fig_width = args.output_size[0] / args.dpi
+    fig_height = args.output_size[1] / args.dpi
+    fig, ax = plt.subplots(figsize=(fig_width, fig_height), tight_layout=True)
     ax.set_xlabel('Hours', fontsize=18)
     ax.set_ylabel('Concentration', fontsize=18)
     ax.grid(linestyle='--')
     ax.plot(x, y)
-    fig.savefig(args.output, dpi=150)
-
+    fig.savefig(args.output, dpi=args.dpi)
 
 if __name__ == '__main__':
     main()
