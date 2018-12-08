@@ -1,8 +1,19 @@
 """Calculates drug concentration over time."""
 
 import numpy as np
-from scipy.linalg import expm
 from scipy.optimize import brent
+
+
+def expm_eig(a):
+    """Compute the matrix exponential using the eigendecomposition.
+
+    :param a: Matrix to be exponentiated.
+    :type a: numpy.ndarray
+    :return: Matrix exponential of A.
+    :rtype: numpy.ndarray
+    """
+    w, v = np.linalg.eig(a)
+    return v @ np.diag(np.exp(w)) @ np.linalg.pinv(v)
 
 
 class Drug:
@@ -54,7 +65,7 @@ class Drug:
         k_a = np.log(2) / hl_a
         k_e = np.log(2) / hl_e
         mat = np.float64([[k_a, -k_a, 0], [0, k_e, -k_e], [0, 0, 0]])
-        mat_step = expm(-mat * step)
+        mat_step = expm_eig(-mat * step)
         solution = np.zeros((num, 3))
         try:
             indexed_doses = {int(round(offset / step)): dose for offset, dose in doses.items()}
