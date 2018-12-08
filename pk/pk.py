@@ -26,8 +26,8 @@ class Drug:
         :param t_max: The drug's time at maximum concentration.
         :type t_max: float
         """
-        self.t_max = float(t_max)
         self.hl_e = float(hl)
+        self.t_max = float(t_max)
         self.hl_a = brent(lambda hl_a: (self._t_max_given_hls(hl_a, self.hl_e) - self.t_max)**2)
         self.c_0 = 1 / self._concentration_at_time(self.t_max, self.hl_a, self.hl_e)
 
