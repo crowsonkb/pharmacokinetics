@@ -29,11 +29,14 @@ class Concentration:
         self.hl = float(form['hl'])
         self.t_max = float(form['t-max'])
         self.duration = float(form['duration'])
+        dose_qs = map(float, form['doses'].split())
+        offsets = map(float, form['offsets'].split())
+        self.doses = dict(zip(offsets, dose_qs))
         drug = pk.Drug(self.hl, self.t_max)
         self.steps = 60
         self.num = round(self.duration * self.steps + 1)
         self.x = np.arange(self.num) / self.steps
-        self.y = drug.concentration(self.num, 1/self.steps, {0: 1})
+        self.y = drug.concentration(self.num, 1/self.steps, self.doses)
 
 
 @dataclass
