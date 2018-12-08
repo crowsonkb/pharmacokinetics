@@ -65,5 +65,6 @@ def concentration_svg():
 
     buf = io.BytesIO()
     fig.savefig(buf, format='svg')
+    plt.close(fig)
     url = 'data:image/svg+xml;base64,' + binascii.b2a_base64(buf.getvalue()).decode()
     return make_response(url)
