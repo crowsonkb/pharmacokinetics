@@ -1,0 +1,32 @@
+<!doctype html>
+
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Drug concentration vs time</title>
+    <link rel="stylesheet" href="normalize.css">
+    <link rel="stylesheet" href="main.css">
+    <script src="jquery-3.3.1.min.js"></script>
+    <script src="main.js"></script>
+</head>
+<body>
+    <div id="content">
+        <h1>Drug concentration vs time</h1>
+        <form id="main-form">
+            <table>
+                <tr>
+                    <td class="label">Terminal half-life (t<sub>½</sub>):
+                    <td class="input"><input type="number" name="hl" min="0" step="any" value="1.0"> hours
+                <tr>
+                    <td class="label">Time of peak concentration (t<sub>max</sub>):
+                    <td class="input"><input type="number" name="t-max" min="0" step="any" value="1.0"> hours
+                <tr>
+                    <td class="label">Duration:
+                    <td class="input"><input type="number" name="duration" min="0" step="any" value="12"> hours
+            </table>
+            <input type="submit" name="submit" value="Submit">
+        </form>
+        <div id="chart"><span class="replace"></span></div>
+    </div>
+</body>
+</html>
