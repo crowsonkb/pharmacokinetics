@@ -1,9 +1,10 @@
 """A Flask web application to calculate and plot drug concentration over time."""
 
+# pylint: disable=wrong-import-position
+
 import binascii
 from dataclasses import asdict, dataclass
 import io
-import json
 from typing import List
 
 from flask import Flask, make_response, jsonify, request
