@@ -6,7 +6,7 @@ setup(
     description='A Flask web application to calculate and plot drug concentration over time.',
     long_description=open('README.md').read(),
     long_description_content_type='text/markdown',
-    url='https://github.com/crowsonkb/pharmacokinetics2',
+    url='https://github.com/crowsonkb/pharmacokinetics',
     author='Katherine Crowson',
     author_email='crowsonkb@gmail.com',
     license='MIT',
