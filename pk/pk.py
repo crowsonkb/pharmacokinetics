@@ -78,8 +78,7 @@ class Drug:
             if i:
                 solution[i] += mat_step.T @ solution[i-1]
             if return_diff:
-                if i:
-                    diff[i] = mat_tangent[0, 1]
+                diff[i] = mat_tangent[0, 1] * step * solution[0, 0]
                 mat_tangent[...] = mat_tangent @ mat_step
         if return_diff:
             return solution[:, 1], diff
