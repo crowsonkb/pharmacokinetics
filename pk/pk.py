@@ -75,7 +75,8 @@ class Drug:
         for i in range(num):
             if i in indexed_doses:
                 solution[i, 0] += indexed_doses[i]
-            solution[i] += mat_step.T @ solution[i-1]
+            if i:
+                solution[i] += mat_step.T @ solution[i-1]
             if return_diff:
                 if i:
                     diff[i] = mat_tangent[0, 1]
