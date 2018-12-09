@@ -9,6 +9,7 @@ a.csv-download {
 
 body {
     font-family: -apple-system, BlinkMacSystemFont, "Lucida Grande", Arial, sans-serif;
+    line-height: 1.25;
 }
 
 #chart-container {
@@ -25,4 +26,8 @@ body {
 
 #main-form td.input input {
     width: 150px;
+}
+
+hr {
+    width: 95%;
 }
