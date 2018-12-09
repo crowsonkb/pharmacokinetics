@@ -1,19 +1,8 @@
 """Calculates drug concentration over time."""
 
 import numpy as np
-from scipy.optimize import brent
-
-
-def expm_eig(a):
-    """Compute the matrix exponential using the eigendecomposition.
-
-    :param a: Matrix to be exponentiated.
-    :type a: numpy.ndarray
-    :return: Matrix exponential of A.
-    :rtype: numpy.ndarray
-    """
-    w, v = np.linalg.eig(a)
-    return v @ np.diag(np.exp(w)) @ np.linalg.pinv(v)
+from scipy.linalg import expm
+from scipy.optimize import brentq
 
 
 class Drug:
@@ -39,14 +28,23 @@ class Drug:
         """
         self.hl_e = float(hl)
         self.t_max = float(t_max)
-        self.hl_a = brent(lambda hl_a: (self._t_max_given_hls(hl_a, self.hl_e) - self.t_max)**2)
+
+        def diff_at_tmax(hl_a):
+            return self._concentration_at_time(self.t_max, hl_a, self.hl_e, return_diff=True)[1]
+        a, b = 1, 1
+        while diff_at_tmax(a) > 0:
+            a /= 10
+        while diff_at_tmax(b) < 0:
+            b *= 10
+        self.hl_a = brentq(diff_at_tmax, a, b)
+
         self.c_0 = 1 / self._concentration_at_time(self.t_max, self.hl_a, self.hl_e)
 
     def __repr__(self):
         return f'Drug(c_0={self.c_0}, hl_a={self.hl_a}, hl_e={self.hl_e}, t_max={self.t_max})'
 
     @staticmethod
-    def _concentration(num, step, hl_a, hl_e, doses):
+    def _concentration(num, step, hl_a, hl_e, doses, return_diff=False):
         """Calculates drug concentration at the given times.
 
         :param num: The number of timesteps to use.
@@ -64,21 +62,30 @@ class Drug:
         """
         k_a = np.log(2) / hl_a
         k_e = np.log(2) / hl_e
-        mat = np.float64([[k_a, -k_a, 0], [0, k_e, -k_e], [0, 0, 0]])
-        mat_step = expm_eig(-mat * step)
+        mat = np.float64([[-k_a, k_a, 0], [0, -k_e, k_e], [0, 0, 0]])
+        mat_step = expm(mat * step)
         solution = np.zeros((num, 3))
+        if return_diff:
+            mat_tangent = mat.copy()
+            diff = np.zeros(num)
         try:
             indexed_doses = {int(round(offset / step)): dose for offset, dose in doses.items()}
         except ZeroDivisionError:
             indexed_doses = {0: sum(doses.values())}
         for i in range(num):
             if i in indexed_doses:
-                solution[i] += [indexed_doses[i], 0, 0]
+                solution[i, 0] += indexed_doses[i]
             solution[i] += mat_step.T @ solution[i-1]
+            if return_diff:
+                if i:
+                    diff[i] = mat_tangent[0, 1]
+                mat_tangent[...] = mat_tangent @ mat_step
+        if return_diff:
+            return solution[:, 1], diff
         return solution[:, 1]
 
     @classmethod
-    def _concentration_at_time(cls, t, hl_a, hl_e):
+    def _concentration_at_time(cls, t, hl_a, hl_e, return_diff=False):
         """Calculates drug concentration at the given instance in time.
 
         :param t: The time to compute the concentration at.
@@ -90,24 +97,10 @@ class Drug:
         :return: The drug concentration at the given instance in time.
         :rtype: float
         """
-        return cls._concentration(2, t, hl_a, hl_e, {0: 1})[1]
-
-    @classmethod
-    def _t_max_given_hls(cls, hl_a, hl_e):
-        """Calculates the time to maximum concentration given drug half-lives.
-
-        :param hl_a: The drug's absorption half-life.
-        :type hl_a: float
-        :param hl_e: The drug's elimination half-life.
-        :type hl_e: float
-        :return: The drug's time to maximum concentration (t_max).
-        :rtype: float
-        """
-        if hl_a == 0:
-            return 0
-        if hl_a < 0:
-            return np.inf
-        return brent(lambda t: -cls._concentration_at_time(t, hl_a, hl_e))
+        res = cls._concentration(2, t, hl_a, hl_e, {0: 1}, return_diff)
+        if return_diff:
+            return res[0][1], res[1][1]
+        return res[1]
 
     def concentration(self, num, step, doses=None):
         """Calculates drug concentration at the given times.
