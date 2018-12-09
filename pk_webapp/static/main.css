@@ -1,5 +1,18 @@
+a:link, a:visited, a:hover, a:active {
+    color: rgb(73%, 73%, 73%);  /* 50% gray */
+}
+
+a.csv-download {
+    margin-left: 68px;
+    font-size: 90%;
+}
+
 body {
     font-family: -apple-system, BlinkMacSystemFont, "Lucida Grande", Arial, sans-serif;
+}
+
+#chart-container {
+    margin-top: 24px;
 }
 
 #content {
