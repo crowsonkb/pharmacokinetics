@@ -2,12 +2,9 @@
 
 # pylint: disable=wrong-import-position
 
-import binascii
-from dataclasses import asdict, dataclass
 import io
-from typing import List
 
-from flask import Flask, make_response, jsonify, request
+from flask import Flask, jsonify, Response, request
 import matplotlib
 matplotlib.use('svg')
 import matplotlib.pyplot as plt
@@ -25,12 +22,12 @@ def root():
 
 
 class Concentration:
-    def __init__(self, form):
-        self.hl = float(form['hl'])
-        self.t_max = float(form['t-max'])
-        self.duration = float(form['duration'])
-        dose_qs = map(float, form['doses'].split())
-        offsets = map(float, form['offsets'].split())
+    def __init__(self, **kwargs):
+        self.hl = float(kwargs['hl'])
+        self.t_max = float(kwargs['t-max'])
+        self.duration = float(kwargs['duration'])
+        dose_qs = map(float, kwargs['doses'].split())
+        offsets = map(float, kwargs['offsets'].split())
         self.doses = dict(zip(offsets, dose_qs))
         drug = pk.Drug(self.hl, self.t_max)
         self.steps = 60
@@ -39,23 +36,16 @@ class Concentration:
         self.y = drug.concentration(self.num, 1/self.steps, self.doses)
 
 
-@dataclass
-class ConcentrationResponse:
-    num: int
-    steps: int
-    concentration: List[float]
+@app.route('/concentration.json')
+def concentration_json():
+    conc = Concentration(**request.args.to_dict())
+    msg = {'concentration': list(conc.y), 'steps': conc.steps}
+    return jsonify(msg)
 
 
-@app.route('/concentration', methods=['POST'])
-def concentration():
-    conc = Concentration(request.form)
-    msg = ConcentrationResponse(conc.num, conc.steps, list(conc.y))
-    return jsonify(asdict(msg))
-
-
-@app.route('/concentration_svg', methods=['POST'])
+@app.route('/concentration.svg')
 def concentration_svg():
-    conc = Concentration(request.form)
+    conc = Concentration(**request.args.to_dict())
 
     fig, ax = plt.subplots(figsize=(8, 5.33), tight_layout=True)
     ax.set_xlabel('Hours', fontsize=14)
@@ -66,5 +56,4 @@ def concentration_svg():
     buf = io.BytesIO()
     fig.savefig(buf, format='svg')
     plt.close(fig)
-    url = 'data:image/svg+xml;base64,' + binascii.b2a_base64(buf.getvalue()).decode()
-    return make_response(url)
+    return Response(buf.getvalue(), mimetype='image/svg+xml')
