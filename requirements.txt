@@ -1,6 +1,8 @@
+blinker>=1.4
 dataclasses>=0.6;python_version<"3.7"
 Flask>=1.0.2
 matplotlib>=2.2.2
 numpy>=1.14.3
+python-dotenv>=0.10.0
 scipy>=1.1.0
 uWSGI>=2.0.17.1
