@@ -1,0 +1,5 @@
+include .flaskenv
+include pk_webapp_config.py
+include README.md
+include uwsgi.ini
+recursive-include pk_webapp/static *
