@@ -20,14 +20,14 @@ body {
     margin: 0 16px;
 }
 
+hr {
+    width: 95%;
+}
+
 #main-form td.label {
     text-align: right;
 }
 
 #main-form td.input input {
     width: 150px;
-}
-
-hr {
-    width: 95%;
 }
