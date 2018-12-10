@@ -14,7 +14,6 @@ import pk
 
 
 app = Flask(__name__, static_url_path='')
-app.config.from_object('pk_webapp_config')
 
 
 @app.route('/')
