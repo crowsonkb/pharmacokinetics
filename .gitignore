@@ -6,3 +6,4 @@ venv
 *.ipynb
 *.sock
 *.pid
+.env

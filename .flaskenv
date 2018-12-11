@@ -1,2 +1,1 @@
-FLASK_APP = pk_webapp/app:app
-FLASK_RUN_PORT = 8000
+FLASK_APP = pk_webapp.app:app
