@@ -4,7 +4,7 @@
 
 import io
 
-from flask import Flask, jsonify, Response, request
+from flask import Flask, jsonify, request, Response
 import matplotlib
 matplotlib.use('svg')
 import matplotlib.pyplot as plt
