@@ -9,8 +9,11 @@ import matplotlib
 matplotlib.use('svg')
 import matplotlib.pyplot as plt
 import numpy as np
+from werkzeug.exceptions import BadRequest
 
 import pk
+
+MAX_DURATION = 720
 
 
 app = Flask(__name__, static_url_path='')
@@ -24,8 +27,16 @@ def root():
 class Concentration:
     def __init__(self, **kwargs):
         self.hl_e = float(kwargs['hl'])
+        if self.hl_e <= 0:
+            raise BadRequest('hl must be positive.')
         self.t_max = float(kwargs['t-max'])
+        if self.t_max <= 0:
+            raise BadRequest('t_max must be positive.')
         self.duration = float(kwargs['duration'])
+        if self.duration <= 0:
+            raise BadRequest('Duration must be positive.')
+        if self.duration > MAX_DURATION:
+            raise BadRequest('Duration exceeds the maximum.')
         dose_qs = map(float, kwargs['doses'].split())
         offsets = map(float, kwargs['offsets'].split())
         self.doses = dict(zip(offsets, dose_qs))
