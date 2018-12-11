@@ -41,7 +41,8 @@ class Drug:
         self.c_0 = 1 / self._concentration_at_time(self.t_max, self.hl_a, self.hl_e)
 
     def __repr__(self):
-        return f'Drug(c_0={self.c_0}, hl_a={self.hl_a}, hl_e={self.hl_e}, t_max={self.t_max})'
+        s = 'Drug(c_0={}, hl_a={}, hl_e={}, t_max={})'
+        return s.format(self.c_0, self.hl_a, self.hl_e, self.t_max)
 
     @staticmethod
     def _concentration(num, step, hl_a, hl_e, doses, return_diff=False):
