@@ -11,10 +11,17 @@ setup(
     author_email='crowsonkb@gmail.com',
     license='MIT',
     packages=['pk', 'pk_webapp'],
-    install_requires=[s.strip() for s in open('requirements.txt').readlines()],
+    data_files=[('', ['.flaskenv', 'demo.svg', 'LICENSE', 'README.md', 'uwsgi.ini'])],
+    include_package_data=True,
+    zip_safe=False,
+    install_requires=[
+        'Flask>=1.0.2',
+        'matplotlib>=2.2.2',
+        'numpy>=1.14.3',
+        'python-dotenv>=0.10.0',
+        'scipy>=1.1.0',
+    ],
     entry_points={
         'console_scripts': ['pk=pk.cli:main'],
     },
-    include_package_data=True,
-    zip_safe=False,
 )
