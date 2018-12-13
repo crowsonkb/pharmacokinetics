@@ -74,10 +74,10 @@ class Drug:
         except ZeroDivisionError:
             indexed_doses = {0: sum(doses.values())}
         for i in range(num):
+            if i:
+                solution[i] = mat_step.T @ solution[i-1]
             if i in indexed_doses:
                 solution[i, 0] += indexed_doses[i]
-            if i:
-                solution[i] += mat_step.T @ solution[i-1]
             if return_diff:
                 diff[i] = mat_tangent[0, 1] * solution[0, 0]
                 mat_tangent[...] = mat_tangent @ mat_step
