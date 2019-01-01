@@ -67,7 +67,7 @@ class Drug:
         mat_step = expm(mat * step)
         solution = np.zeros((num, 3))
         if return_diff:
-            mat_tangent = mat.copy()
+            mat_tangent = np.copy(mat)
             diff = np.zeros(num)
         try:
             indexed_doses = {int(round(offset / step)): dose for offset, dose in doses.items()}
