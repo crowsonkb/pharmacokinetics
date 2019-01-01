@@ -18,7 +18,7 @@ from .parser import parse_expr
 MAX_DURATION = 720
 
 
-app = Flask(__name__, static_url_path='')
+app = Flask(__name__)
 
 
 @app.route('/')
