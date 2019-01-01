@@ -2,6 +2,7 @@
 
 # pylint: disable=wrong-import-position
 
+from itertools import zip_longest
 import io
 
 from flask import Flask, jsonify, request, Response
@@ -12,6 +13,7 @@ import numpy as np
 from werkzeug.exceptions import BadRequest
 
 import pk
+from .parser import parse_expr
 
 MAX_DURATION = 720
 
@@ -32,14 +34,14 @@ class Concentration:
         self.t_max = float(kwargs['t-max'])
         if self.t_max <= 0:
             raise BadRequest('t_max must be positive.')
-        self.duration = float(kwargs['duration'])
+        self.duration = parse_expr(kwargs['duration'])
         if self.duration <= 0:
             raise BadRequest('Duration must be positive.')
         if self.duration > MAX_DURATION:
             raise BadRequest('Duration exceeds the maximum.')
-        dose_qs = map(float, kwargs['doses'].split())
-        offsets = map(float, kwargs['offsets'].split())
-        self.doses = dict(zip(offsets, dose_qs))
+        dose_qs = list(map(float, kwargs['doses'].split()))
+        offsets = map(parse_expr, kwargs['offsets'].split())
+        self.doses = dict(zip_longest(offsets, dose_qs, fillvalue=dose_qs[-1]))
         self.drug = pk.Drug(self.hl_e, self.t_max)
         self.steps = 60
         self.num = round(self.duration * self.steps + 1)
