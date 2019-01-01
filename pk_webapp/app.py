@@ -50,10 +50,10 @@ def root():
 
 class Concentration:
     def __init__(self, **kwargs):
-        self.hl_e = float(kwargs['hl'])
+        self.hl_e = parse_expr(kwargs['hl'])
         if self.hl_e <= 0:
             raise BadRequest('hl must be positive.')
-        self.t_max = float(kwargs['t-max'])
+        self.t_max = parse_expr(kwargs['t-max'])
         if self.t_max <= 0:
             raise BadRequest('t_max must be positive.')
         self.duration = parse_expr(kwargs['duration'])
