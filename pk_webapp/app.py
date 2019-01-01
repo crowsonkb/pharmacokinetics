@@ -1,6 +1,6 @@
 """A Flask web application to calculate and plot drug concentration over time."""
 
-from itertools import zip_longest
+from itertools import repeat
 import io
 
 from flask import Flask, jsonify, request, Response
@@ -19,6 +19,28 @@ MAX_DURATION = 720
 
 
 app = Flask(__name__)
+
+
+def zip_longest(*iterables):
+    iterators = list(map(iter, iterables))
+    num_active = len(iterators)
+    if not num_active:
+        return
+    last_values = [None] * len(iterators)
+    while True:
+        values = []
+        for i, it in enumerate(iterators):
+            try:
+                value = next(it)
+            except StopIteration:
+                num_active -= 1
+                if not num_active:
+                    return
+                iterators[i] = repeat(last_values[i])
+                value = last_values[i]
+            values.append(value)
+        yield tuple(values)
+        last_values = values
 
 
 @app.route('/')
@@ -41,7 +63,7 @@ class Concentration:
             raise BadRequest('Duration exceeds the maximum.')
         dose_qs = list(map(float, kwargs['doses'].split()))
         offsets = map(parse_expr, kwargs['offsets'].split())
-        self.doses = dict(zip_longest(offsets, dose_qs, fillvalue=dose_qs[-1]))
+        self.doses = dict(zip_longest(offsets, dose_qs))
         self.drug = pk.Drug(self.hl_e, self.t_max)
         self.steps = 60
         self.num = round(self.duration * self.steps + 1)
