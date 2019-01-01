@@ -1,19 +1,19 @@
 """A Flask web application to calculate and plot drug concentration over time."""
 
-# pylint: disable=wrong-import-position
-
 from itertools import zip_longest
 import io
 
 from flask import Flask, jsonify, request, Response
 import matplotlib
-matplotlib.use('svg')
-import matplotlib.pyplot as plt
 import numpy as np
 from werkzeug.exceptions import BadRequest
 
 import pk
+
 from .parser import parse_expr
+
+matplotlib.use('svg')
+import matplotlib.pyplot as plt  # pylint: disable=C0411, C0412, C0413
 
 MAX_DURATION = 720
 
